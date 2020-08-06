@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 150592f00b0a0544f8ee18a71cd0a91f
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: SF Action Man Shaded
+  fontNames:
+  - SF Action Man Shaded
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 0fa5bdc6f1ecc2e4e8d153ddefea3f53, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,242 @@
+﻿using System;
+using System.Collections;
+#if !UNITY_EDITOR
+using System.Collections;
+using System.IO;
+#endif
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Assets.Scripts.Utils
+{
+    public static class UsefullUtils
+    {
+        public static float GetPercent(float value, float percent)
+        {
+            return (value / 100f) * percent;
+        }
+
+        public static float GetValuePercent(float value, float maxValue)
+        {
+            //if (value < 0 && maxValue)
+            return (value * 100f) / maxValue;
+        }
+
+        public static float InvertPercent(float percent)
+        {
+            return (100 - percent);
+        }
+
+        public static string ConvertNumberToKs(int num)
+        {
+            if (num >= 1000)
+                return string.Concat(num / 1000, "k");
+            else
+                return num.ToString();
+        }
+
+        public static Color white;
+        public static Color placeholderTextColor;  // fadeGrey
+        public static Color textColor;  // grey
+        public static Color black;
+        public static Color importantText;
+
+        public static void InitColors()
+        {
+            ColorUtility.TryParseHtmlString("#E6E6E6FF", out white);
+            ColorUtility.TryParseHtmlString("#18191AFF", out black);
+            ColorUtility.TryParseHtmlString("#FF3232", out importantText);
+            ColorUtility.TryParseHtmlString("#909090FF", out textColor); //AAAAAAFF
+            ColorUtility.TryParseHtmlString("#323232FF", out placeholderTextColor);
+        }
+
+        public static int CountLinesInFile(string filePath)
+        {
+            int count = 0;
+            using (System.IO.StreamReader r = new System.IO.StreamReader(filePath))
+            {
+                string line;
+                while ((line = r.ReadLine()) != null)
+                    count++;
+            }
+            return count;
+        }
+
+        public static GameObject CreateGameObject(GameObject go, string name = "GameObject", Transform parent = null)
+        {
+            go.name = name;
+            go.transform.SetParent(parent, false);
+            // go.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+            return go;
+        }
+
+        public static GameObject CreateUiObject(GameObject go, string name = "UiObject", Transform parent = null)
+        {
+            go.name = name;
+            go.transform.SetParent(parent, false);
+            go.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+            return go;
+        }
+
+        public delegate bool PoolCheck(IPrefabComponent component);
+
+        public static bool CheckInPool(PoolCheck poolCheck, GameObject prefab, Transform parent, out IPrefabComponent component, ref List<IPrefabComponent> pool)
+        {
+            var wasNull = false;
+            component = null;
+
+            if (pool == null)
+            {
+                pool = new List<IPrefabComponent>();
+                wasNull = true;
+            }
+            else
+            {
+                wasNull = pool.Count(c => poolCheck(c)) == 0;
+                if (wasNull == false)
+                {
+                    component = pool.FirstOrDefault(c => poolCheck(c));
+                    component.GameObject.SetActive(true);
+                }
+            }
+
+            if (wasNull == true)
+            {
+                var go = CreateUiObject(
+                    GameHiddenOptions.Instance.GetAnInstantiated(prefab),
+                    "clone",
+                    parent
+                    );
+                component = go.GetComponent<IPrefabComponent>();
+            }
+
+            return wasNull;
+        }
+
+        public static string GetPathToStreamingAssetsFile(string fileName = "")
+        {
+            string filePath = string.Empty;
+
+#if UNITY_EDITOR
+            filePath = string.Format(@"Assets/StreamingAssets/{0}", fileName);
+#else
+            // check if file exists in Application.persistentDataPath
+            filePath = string.Format("{0}/{1}", Application.persistentDataPath, fileName);
+
+            if (!File.Exists(filePath))
+            {
+                Debug.Log("Database not in Persistent path");
+                // if it doesn't ->
+                // open StreamingAssets directory and load the db ->
+
+#if UNITY_ANDROID
+                var loadFile = new WWW("jar:file://" + Application.dataPath + "!/assets/" + fileName);  // this is the path to your StreamingAssets in android
+                while (!loadFile.isDone) { }  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
+                // then save to Application.persistentDataPath
+                File.WriteAllBytes(filePath, loadFile.bytes);
+#elif UNITY_IOS
+                var loadFile = Application.dataPath + "/Raw/" + fileName;  // this is the path to your StreamingAssets in iOS
+                // then save to Application.persistentDataPath
+                File.Copy(loadFile, filePath);
+#elif UNITY_WP8
+                var loadFile = Application.dataPath + "/StreamingAssets/" + fileName;  // this is the path to your StreamingAssets in iOS
+                // then save to Application.persistentDataPath
+                File.Copy(loadFile, filePath);
+#elif UNITY_WINRT
+		        var loadFile = Application.dataPath + "/StreamingAssets/" + fileName;  // this is the path to your StreamingAssets in iOS
+		        // then save to Application.persistentDataPath
+		        File.Copy(loadFile, filePath);
+#else
+	            var loadFile = Application.dataPath + "/StreamingAssets/" + fileName;  // this is the path to your StreamingAssets in iOS
+	            // then save to Application.persistentDataPath
+	            File.Copy(loadFile, filePath);
+#endif
+                Debug.Log("Database written");
+            }
+#endif
+            return filePath;
+        }
+
+        public static void DumpToConsole(object obj, bool isArray = false)
+        {
+            string output = string.Empty;
+            if (isArray)
+            {
+                output = JsonHelper.ToJson<object>(obj);
+            }
+            else
+            {
+                output = JsonUtility.ToJson(obj, true);
+            }
+            Debug.Log(output);
+        }
+
+        public static void DumpToJsonConsole(IJsonConsole[] jsonConsoles)
+        {
+            foreach (var json in jsonConsoles)
+            {
+                Debug.Log(json.ToJsonString());
+            }
+        }
+
+        public static string RemoveWhitespace(this string input)
+        {
+            return new string(input.ToCharArray()
+                .Where(c => !Char.IsWhiteSpace(c))
+                .ToArray());
+        }
+
+        public static bool IsDigitsOnly(string str)
+        {
+            foreach (char c in str)
+            {
+                if (c < '0' || c > '9')
+                    return false;
+            }
+            return true;
+        }
+
+        public static System.Object GetPropValue(this System.Object obj, string name)
+        {
+            foreach (string part in name.Split('.'))
+            {
+                if (obj == null) { return null; }
+
+                System.Type type = obj.GetType();
+                PropertyInfo info = type.GetProperty(part);
+                if (info == null) { return null; }
+
+                obj = info.GetValue(obj, null);
+            }
+            return obj;
+        }
+
+        public static T GetPropValue<T>(this System.Object obj, string name)
+        {
+            System.Object retval = GetPropValue(obj, name);
+            if (retval == null) { return default(T); }
+
+            // throws InvalidCastException if types are incompatible
+            return (T)retval;
+        }
+
+        public static void SetImageAlpha(Image image, float value)
+        {
+            var tempColor = image.color;
+            tempColor.a = value;
+            image.color = tempColor;
+        }
+    }
+
+    public enum NavbarButton
+    {
+        HomeButton,
+        FriendsButton,
+        HistoryButton
+    }
+}

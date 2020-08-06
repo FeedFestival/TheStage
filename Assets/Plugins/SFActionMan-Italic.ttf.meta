@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: f409252ac75af694eaf1593592e34732
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: SF Action Man
+  fontNames:
+  - SF Action Man
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 3e2712e4d2a17e84bbc3a41d4329e502, type: 3}
+  - {fileID: 12800000, guid: c3c3232594a8de4459bc799c62edb14a, type: 3}
+  - {fileID: 12800000, guid: 9f012a49c3675ab409d823ba86538e1a, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

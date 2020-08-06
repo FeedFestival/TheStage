@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 90010b441b0ca784c81701f1d929fdec
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: SF Action Man Extended
+  fontNames:
+  - SF Action Man Extended
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1aa8506873f02824d9f891c04ee876fb, type: 3}
+  - {fileID: 12800000, guid: 090cb8ba70785de43a78d6e8b85a8e97, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
