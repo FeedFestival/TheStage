@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Utils;
+using Assets.Scripts.utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -105,12 +105,12 @@ public class c_FromSpaceToGround_Action : IAction
         _c_FromSpaceToGround.MainPanelToMove.anchoredPosition = tChanges.OriginalAnchorPos;
 
         _c_FromSpaceToGround.Car.gameObject.SetActive(true);
-        UsefullUtils.SetImageAlpha(_c_FromSpaceToGround.Car.GetComponent<Image>(), 0f);
+        __utils.SetImageAlpha(_c_FromSpaceToGround.Car.GetComponent<Image>(), 0f);
         _c_FromSpaceToGround.CarPanel1.gameObject.SetActive(true);
-        UsefullUtils.SetImageAlpha(_c_FromSpaceToGround.CarPanel1.GetComponent<Image>(), 0f);
+        __utils.SetImageAlpha(_c_FromSpaceToGround.CarPanel1.GetComponent<Image>(), 0f);
 
         _c_FromSpaceToGround.CarPanel2.gameObject.SetActive(true);
-        UsefullUtils.SetImageAlpha(_c_FromSpaceToGround.CarPanel2.GetComponent<Image>(), 0f);
+        __utils.SetImageAlpha(_c_FromSpaceToGround.CarPanel2.GetComponent<Image>(), 0f);
         tChanges = _c_FromSpaceToGround.CarPanel2.GetComponent<TransformChanges>();
         _c_FromSpaceToGround.CarPanel2.anchoredPosition = tChanges.OriginalAnchorPos;
         _c_FromSpaceToGround.CarPanel2.sizeDelta = tChanges.OriginalScaleDelta;
@@ -120,10 +120,10 @@ public class c_FromSpaceToGround_Action : IAction
         tChanges = _c_FromSpaceToGround.CarPanel3.GetComponent<TransformChanges>();
         _c_FromSpaceToGround.CarPanel3.anchoredPosition = tChanges.OriginalAnchorPos;
         _c_FromSpaceToGround.CarPanel3.sizeDelta = tChanges.OriginalScaleDelta;
-        UsefullUtils.SetImageAlpha(_c_FromSpaceToGround.CarPanel3.GetComponent<Image>(), 0f);
+        __utils.SetImageAlpha(_c_FromSpaceToGround.CarPanel3.GetComponent<Image>(), 0f);
 
         _c_FromSpaceToGround.CarPanel4.gameObject.SetActive(true);
-        UsefullUtils.SetImageAlpha(_c_FromSpaceToGround.CarPanel4.GetComponent<Image>(), 0f);
+        __utils.SetImageAlpha(_c_FromSpaceToGround.CarPanel4.GetComponent<Image>(), 0f);
     }
 
     private void MovePanelSlowly(PanelPosition panelPosition)
@@ -133,7 +133,8 @@ public class c_FromSpaceToGround_Action : IAction
         {
             _movePanelId = LeanTween.move(_c_FromSpaceToGround.MainPanelToMove, tChanges.SecondAnchorPos, _movePanelTime).id;
             LeanTween.descr(_movePanelId.Value).setEase(LeanTweenType.easeInOutQuad);
-            TimeService.Instance.Wait(ShowCar, UsefullUtils.GetPercent(_movePanelTime, 80f));
+            var panelTp = percent.Find(_percent: 80, _of: _movePanelTime);
+            TimeService.Instance.Wait(ShowCar, panelTp);
             LeanTween.descr(_movePanelId.Value).setOnComplete(() =>
             {
                 LeanTween.cancel(_movePanelId.Value);
@@ -147,7 +148,8 @@ public class c_FromSpaceToGround_Action : IAction
         else
         {
             _movePanelId = LeanTween.move(_c_FromSpaceToGround.MainPanelToMove, tChanges.ThirdAnchorPos, _movePanelSecondTime).id;
-            TimeService.Instance.Wait(ShowPanelCar1, UsefullUtils.GetPercent(_movePanelSecondTime, 20f));
+            var panelTp = percent.Find(_percent: 20, _of: _movePanelSecondTime);
+            TimeService.Instance.Wait(ShowPanelCar1, panelTp);
             LeanTween.descr(_movePanelId.Value).setOnComplete(() =>
             {
                 LeanTween.cancel(_movePanelId.Value);
@@ -198,7 +200,9 @@ public class c_FromSpaceToGround_Action : IAction
                 {
                     _c_FromSpaceToGround.CarPanel2.eulerAngles = newValue;
                 });
-            TimeService.Instance.Wait(ShowCarPanel3, UsefullUtils.GetPercent(_zoomPanelTime, 70f));
+
+            var timeP = percent.Find(_percent: 70, _of: _zoomPanelTime);
+            TimeService.Instance.Wait(ShowCarPanel3, timeP);
         }, 0.5f);
     }
 
@@ -207,10 +211,14 @@ public class c_FromSpaceToGround_Action : IAction
         float timeToShow = 2f;
         LeanTween.alpha(_c_FromSpaceToGround.CarPanel3, 1f, timeToShow)
             .setEase(LeanTweenType.linear);
+        var timeP = percent.Find(_percent: 60, _of: timeToShow);
+
         TimeService.Instance.Wait(() =>
         {
             var panel3Time = 4f;
+            var panel3P = percent.Find(_percent: 90, _of: panel3Time);
             var tChanges = _c_FromSpaceToGround.CarPanel3.GetComponent<TransformChanges>();
+
             LeanTween.value(_c_FromSpaceToGround.CarPanel3.gameObject,
                 tChanges.OriginalScaleDelta,
                 tChanges.SecondScaleDelta, panel3Time)
@@ -228,8 +236,8 @@ public class c_FromSpaceToGround_Action : IAction
             TimeService.Instance.Wait(() =>
             {
                 ShowCarPanel4();
-            }, UsefullUtils.GetPercent(panel3Time, 90f));
-        }, UsefullUtils.GetPercent(timeToShow, 60f));
+            }, panel3P);
+        }, timeP);
     }
 
     private void ShowCarPanel4()

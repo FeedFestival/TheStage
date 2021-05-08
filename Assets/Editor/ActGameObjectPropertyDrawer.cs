@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using Assets.Scripts.Utils;
+using Assets.Scripts.utils;
 
 public enum Speeds {
     NormalSpeed,
@@ -22,19 +22,28 @@ public class ActGameObjectPropertyDrawer : PropertyDrawer
 
         Rect foldPos = new Rect(position.x + 0, position.y + 0, position.width, 15);
 
+        var pX = percent.Find(_percent: 0, _of: position.width);
+        var pZ = percent.Find(_percent: 25, _of: position.width);
         Rect startHLabelPos = new Rect(
-            position.x + UsefullUtils.GetPercent(position.width, 0), position.y + 15,
-            UsefullUtils.GetPercent(position.width, 25),
+            position.x + pX,
+            position.y + 15,
+            pZ,
             25
             );
+        pX = percent.Find(_percent: 30, _of: position.width);
+        pZ = percent.Find(_percent: 25, _of: position.width);
         Rect speedPos = new Rect(
-            position.x + UsefullUtils.GetPercent(position.width, 30), position.y + 15,
-            UsefullUtils.GetPercent(position.width, 25),
+            position.x + pX,
+            position.y + 15,
+            pZ,
             25
             );
+        pX = percent.Find(_percent: 60, _of: position.width);
+        pZ = percent.Find(_percent: 40, _of: position.width);
         Rect goPos = new Rect(
-            position.x + UsefullUtils.GetPercent(position.width, 60), position.y + 15,
-            UsefullUtils.GetPercent(position.width, 40),
+            position.x + pX,
+            position.y + 15,
+            pZ,
             25
             );
 

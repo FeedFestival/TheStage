@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Utils;
+using Assets.Scripts.utils;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,10 +12,12 @@ public class ActManagerEditor : Editor
     {
         ActManager myTarget = (ActManager)target;
 
+        var screenXp = percent.Find(_percent: 25, _of: Screen.width);
+        
         EditorGUILayout.BeginHorizontal();
         Rect resetBut = new Rect(
             0, 0,
-            UsefullUtils.GetPercent(Screen.width, 25),
+            screenXp,
             25
             );
         if (GUI.Button(resetBut, "Reset Start"))
@@ -24,8 +26,8 @@ public class ActManagerEditor : Editor
         }
 
         Rect resetSBut = new Rect(
-            UsefullUtils.GetPercent(Screen.width, 25) + 15, 0,
-            UsefullUtils.GetPercent(Screen.width, 25),
+            screenXp + 15, 0,
+            screenXp,
             25
             );
         if (GUI.Button(resetSBut, "Reset Speed"))

@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Utils;
+﻿using Assets.Scripts.utils;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -31,10 +31,12 @@ public class TransformChangesEditor : Editor
         myTarget = (TransformChanges)target;
 
         var minHeight = 30;
-        if (myTarget.OriginalFoldout) {
+        if (myTarget.OriginalFoldout)
+        {
             minHeight = 150;
         }
-        if (myTarget.ToSecondFoldout) {
+        if (myTarget.ToSecondFoldout)
+        {
             minHeight = 200;
         }
         var componentHeight = ((topY + 30) < minHeight) ? minHeight : (topY + 30);
@@ -49,12 +51,19 @@ public class TransformChangesEditor : Editor
         GUILayout.BeginArea(buttonPos);
         EditorGUILayout.BeginHorizontal();
 
+        var screenXp = percent.Find(_percent: 20, _of: Screen.width);
         myTarget.TransformAnchorPos = GUILayout.Toggle(myTarget.TransformAnchorPos, "Anchor Pos", "Button",
-            GUILayout.Width(UsefullUtils.GetPercent(Screen.width, 20)), GUILayout.Height(height));
+            GUILayout.Width(screenXp),
+            GUILayout.Height(height)
+        );
         myTarget.TransformDelta = GUILayout.Toggle(myTarget.TransformDelta, "Delta", "Button",
-            GUILayout.Width(UsefullUtils.GetPercent(Screen.width, 20)), GUILayout.Height(height));
+            GUILayout.Width(screenXp),
+            GUILayout.Height(height)
+        );
         myTarget.TransformRotation = GUILayout.Toggle(myTarget.TransformRotation, "Rotation", "Button",
-            GUILayout.Width(UsefullUtils.GetPercent(Screen.width, 20)), GUILayout.Height(height));
+            GUILayout.Width(screenXp),
+            GUILayout.Height(height)
+        );
 
         EditorGUILayout.EndHorizontal();
         GUILayout.EndArea();
@@ -99,9 +108,25 @@ public class TransformChangesEditor : Editor
         if (myTarget.OriginalFoldout = EditorGUI.Foldout(foldPos, myTarget.OriginalFoldout, "Original"))
         {
             topY += height;
-            Rect buttonLock = new Rect(topX, topY, UsefullUtils.GetPercent(insideFoldWidth, 10), height);
-            Rect buttonSet = new Rect(topX + UsefullUtils.GetPercent(insideFoldWidth, 10), topY, UsefullUtils.GetPercent(insideFoldWidth, 40), height);
-            Rect buttonView = new Rect(topX + UsefullUtils.GetPercent(insideFoldWidth, 50), topY, UsefullUtils.GetPercent(insideFoldWidth, 50), height);
+            var widthP = percent.Find(_percent: 10, _of: insideFoldWidth);
+            Rect buttonLock = new Rect(
+                topX, topY,
+                widthP, height
+            );
+
+            var topXp = percent.Find(_percent: 10, _of: insideFoldWidth);
+            widthP = percent.Find(_percent: 40, _of: insideFoldWidth);
+            Rect buttonSet = new Rect(
+                topX + topXp, topY,
+                widthP, height
+            );
+
+            topXp = percent.Find(_percent: 50, _of: insideFoldWidth);
+            widthP = percent.Find(_percent: 50, _of: insideFoldWidth);
+            Rect buttonView = new Rect(
+                topX + topXp, topY,
+                widthP, height
+            );
             if (GUI.Button(buttonLock, myTarget.OriginalLocked ? "Unlock" : "Lock"))
             {
                 myTarget.OriginalLocked = !myTarget.OriginalLocked;
@@ -165,9 +190,25 @@ public class TransformChangesEditor : Editor
         if (myTarget.ToSecondFoldout = EditorGUI.Foldout(foldPos, myTarget.ToSecondFoldout, "To Second"))
         {
             topY += height;
-            Rect buttonLock = new Rect(topX, topY, UsefullUtils.GetPercent(insideFoldWidth, 10), height);
-            Rect buttonSet = new Rect(topX + UsefullUtils.GetPercent(insideFoldWidth, 10), topY, UsefullUtils.GetPercent(insideFoldWidth, 40), height);
-            Rect buttonView = new Rect(topX + UsefullUtils.GetPercent(insideFoldWidth, 50), topY, UsefullUtils.GetPercent(insideFoldWidth, 50), height);
+            var widthP = percent.Find(_percent: 10, _of: insideFoldWidth);
+            Rect buttonLock = new Rect(
+                topX, topY,
+                widthP, height
+            );
+
+            var topXp = percent.Find(_percent: 10, _of: insideFoldWidth);
+            widthP = percent.Find(_percent: 40, _of: insideFoldWidth);
+            Rect buttonSet = new Rect(
+                topX + topXp, topY,
+                widthP, height
+            );
+
+            topXp = percent.Find(_percent: 50, _of: insideFoldWidth);
+            widthP = percent.Find(_percent: 50, _of: insideFoldWidth);
+            Rect buttonView = new Rect(
+                topX + topXp, topY,
+                widthP, height
+            );
             if (GUI.Button(buttonLock, myTarget.SecondLocked ? "Unlock" : "Lock"))
             {
                 myTarget.SecondLocked = !myTarget.SecondLocked;
@@ -229,9 +270,13 @@ public class TransformChangesEditor : Editor
         topY += 25;
         Rect secondToggled = new Rect(topX, topY, insideFoldWidth, 100);
 
+        var screenWp = percent.Find(_percent: 10, _of: Screen.width);
+
         GUILayout.BeginArea(secondToggled);
         myTarget.UseThird = GUILayout.Toggle(myTarget.UseThird, "Third", "Button",
-            GUILayout.Width(UsefullUtils.GetPercent(Screen.width, 10)), GUILayout.Height(height));
+            GUILayout.Width(screenWp),
+            GUILayout.Height(height)
+        );
         GUILayout.EndArea();
 
         if (myTarget.UseThird)
@@ -241,9 +286,25 @@ public class TransformChangesEditor : Editor
             if (myTarget.ToThirdFoldout = EditorGUI.Foldout(foldPos, myTarget.ToThirdFoldout, "To Third"))
             {
                 topY += height;
-                Rect buttonLock = new Rect(topXSecondLevel, topY, UsefullUtils.GetPercent(insideFoldSecondLevelWidth, 10), height);
-                Rect buttonSet = new Rect(topXSecondLevel + UsefullUtils.GetPercent(insideFoldSecondLevelWidth, 10), topY, UsefullUtils.GetPercent(insideFoldSecondLevelWidth, 40), height);
-                Rect buttonView = new Rect(topXSecondLevel + UsefullUtils.GetPercent(insideFoldSecondLevelWidth, 50), topY, UsefullUtils.GetPercent(insideFoldSecondLevelWidth, 50), height);
+                var widthXp = percent.Find(_percent: 10, _of: insideFoldSecondLevelWidth);
+                Rect buttonLock = new Rect(
+                    topXSecondLevel, topY,
+                    widthXp, height
+                );
+
+                var topXp = percent.Find(_percent: 10, _of: insideFoldSecondLevelWidth);
+                widthXp = percent.Find(_percent: 40, _of: insideFoldSecondLevelWidth);
+                Rect buttonSet = new Rect(
+                    topXSecondLevel + topXp, topY,
+                    widthXp, height
+                );
+
+                topXp = percent.Find(_percent: 50, _of: insideFoldSecondLevelWidth);
+                widthXp = percent.Find(_percent: 50, _of: insideFoldSecondLevelWidth);
+                Rect buttonView = new Rect(
+                    topXSecondLevel + topXp, topY,
+                    widthXp, height
+                );
                 if (GUI.Button(buttonLock, myTarget.ThirdLocked ? "Unlock" : "Lock"))
                 {
                     myTarget.ThirdLocked = !myTarget.ThirdLocked;
@@ -306,9 +367,11 @@ public class TransformChangesEditor : Editor
         topY += 25;
         Rect secondToggled = new Rect(topX, topY, insideFoldWidth, 100);
 
+        var screenWp = percent.Find(_percent: 10, _of: Screen.width);
         GUILayout.BeginArea(secondToggled);
         myTarget.UseForth = GUILayout.Toggle(myTarget.UseForth, "Forth", "Button",
-            GUILayout.Width(UsefullUtils.GetPercent(Screen.width, 10)), GUILayout.Height(height));
+            GUILayout.Width(screenWp), GUILayout.Height(height)
+            );
         GUILayout.EndArea();
 
     }

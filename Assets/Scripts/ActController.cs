@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Assets.Scripts.Utils;
+using Assets.Scripts.utils;
 
 public class ActController : MonoBehaviour
 {
@@ -73,7 +73,7 @@ public class ActController : MonoBehaviour
         }
         else
         {
-            if (UsefullUtils.IsDigitsOnly(StartAtAct))
+            if (__utils.IsDigitsOnly(StartAtAct))
             {
                 ActIndex = System.Convert.ToInt32(StartAtAct);
                 StartAtAct = ActManager.Instance().GetActDict().ElementAt(ActIndex).Key;
